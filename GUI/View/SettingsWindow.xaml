@@ -1,27 +1,87 @@
-﻿<Window x:Class="SMBMonitor.View.SettingsWindow"
+﻿<mah:MetroWindow x:Class="SMBMonitor.View.SettingsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SMBMonitor"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:conv="clr-namespace:SMBMonitor.Converters"
         mc:Ignorable="d"
-        Title="SettingsWindow">
+        ResizeMode="CanMinimize" 
+        Width="515" Height="265"
+        Icon="{DynamicResource Monitor}"
+        Title="Настройки мониторинга">
+    
+    <b:Interaction.Triggers>
+        <b:EventTrigger EventName="Closing">
+            <b:InvokeCommandAction Command="{Binding CloseWindow}" />
+        </b:EventTrigger>
+    </b:Interaction.Triggers>
+
+    <Window.Resources>
+        <conv:BoolToVisibilityConverter x:Key="BtVConverter"/>
+    </Window.Resources>
+
     <Grid>
-        <Grid.ColumnDefinitions >
+        <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Content="Порт SMB сервера по умолчанию" HorizontalAlignment="Left" Margin="10,5,10,5" VerticalAlignment="Center"/>
-        <Label Content="Интервал опроса порта, мс" HorizontalAlignment="Left" Margin="10,5,10,5" Grid.Row="1" VerticalAlignment="Top"/>
-        <Label Content="Период опроса порта, мс" HorizontalAlignment="Left" Margin="10,5,10,10" Grid.Row="2" VerticalAlignment="Top"/>
-        <TextBox Grid.Column="1" HorizontalAlignment="Left" Margin="10,5,10,5" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="120" TextChanged="TextBox_TextChanged"/>
-        <TextBox Grid.Column="1" HorizontalAlignment="Left" Margin="10,5,10,5" Grid.Row="1" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="120"/>
-        <TextBox Grid.Column="1" HorizontalAlignment="Left" Margin="10,5,10,10" Grid.Row="2" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="120"/>
-    </Grid>
+        <DockPanel Grid.Row="0" LastChildFill="True">
+            <mah:NumericUpDown DockPanel.Dock="Right" Margin="10,5,10,5" 
+                               Minimum="1" Maximum="65535" 
+                               Value="{Binding SmbPort,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" HorizontalAlignment="Left"/>
+            <Label DockPanel.Dock="Left" Margin="10,0,0,0"
+                   Content="Порт SMB сервера по умолчанию" 
+                   HorizontalAlignment="Left"  VerticalAlignment="Center" FontSize="14"/>
+        </DockPanel>
 
-</Window>
+        <DockPanel Grid.Row="1" LastChildFill="True">
+            <mah:NumericUpDown DockPanel.Dock="Right" Margin="10,5,10,5" 
+                               Minimum="0" 
+                               Value="{Binding Timings.Interval,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" HorizontalAlignment="Left"/>
+            <Label DockPanel.Dock="Left" Margin="10,0,0,0"
+                   Content="Интервал опроса порта, мс" 
+                   HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="14"/>
+        </DockPanel>
+
+        <DockPanel Grid.Row="2" LastChildFill="True">
+            <mah:NumericUpDown DockPanel.Dock="Right" Margin="10,5,10,5"
+                               Minimum="0"
+                               Value="{Binding Timings.Timeout, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" 
+                               HorizontalAlignment="Left"/>
+            <Label DockPanel.Dock="Left" Margin="10,0,0,0"
+                   Content="Таймаут опроса порта, мс" 
+                   HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="14"/>
+        </DockPanel>
+       
+        <mah:ToggleSwitch Grid.Row="3"
+                          Margin="10,5,10,5"
+                          Content="Автоматически запускать мониторинг недоступных сетевых дисков"
+                          IsOn ="{Binding IsUnavailableSharesMonitoringAutostart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <mah:ToggleSwitch x:Name="LogSwitch" Grid.Row="4"
+                          Margin="10,5,10,5" 
+                          Content="Сохранять лог в файл" 
+                          IsOn="{Binding IsSaveLogToFile, Mode=TwoWay}"/>
+
+        <DockPanel x:Name="LogPathPanel" Grid.Row="5" LastChildFill="True"
+                    Margin="10,5,10,5"
+                    Visibility="{Binding ElementName=LogSwitch, Path=IsOn, Converter={StaticResource BtVConverter}, Mode=OneWay}">
+            
+            <Button DockPanel.Dock="Right" Command="{Binding SelectLogFile}" 
+                    Width="26" Height="26" Template="{StaticResource DefaultButton}">
+                <Image Source="{DynamicResource SaveFile}"/>
+            </Button>
+            <TextBox DockPanel.Dock="Left" IsEnabled="False" 
+                     Text="{Binding LogFileName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </DockPanel>
+    </Grid>
+</mah:MetroWindow>

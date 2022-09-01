@@ -3,7 +3,6 @@
     <!--Default button-->
     <ControlTemplate x:Key="DefaultButton" TargetType="Button">
         <Grid x:Name="grid">
-            <!--<Rectangle StrokeThickness="2" Stroke="Black"/>-->
             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
         <ControlTemplate.Triggers>

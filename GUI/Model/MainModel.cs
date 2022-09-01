@@ -11,19 +11,54 @@ using SmbMonitorLib;
 namespace SMBMonitor.Model;
 
 //TODO Добавить систему логов
-public class MainModel : INotifyPropertyChanged
+public class MainModel
 {
+    private readonly SettingsModel _settingsModel;
+    private int _smbPort;
+    private Timings _monitoringTimings;
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public MainModel()
+    public MainModel(SettingsModel settingsModel)
     {
+        _monitoringTimings = new Timings();
         ServerMonitors = new ObservableCollection<SmbServerMonitor>();
-        SmbPort = Defaults.SmbPort;
-        MonitoringTimings = Defaults.Timings;
+        _settingsModel = settingsModel;
+        _settingsModel.PropertyChanged += OnSettingsChanged;
+        GetSettings();
     }
 
     public ObservableCollection<SmbServerMonitor> ServerMonitors { get; }
-    public int SmbPort { get; set; }
+
+    public int SmbPort
+    {
+        get => _smbPort;
+        set
+        {
+            if (value == _smbPort) return;
+
+            _smbPort = value;
+            foreach (var monitor in ServerMonitors)
+            {
+                monitor.SmbPort = _smbPort;
+            }
+        }
+    }
+
+    public Timings MonitoringTimings
+    {
+        get => _monitoringTimings;
+        set
+        {
+            if (_monitoringTimings.Equals(value)) return;
+
+            _monitoringTimings = value;
+            foreach (var monitor in ServerMonitors)
+            {
+                monitor.Timings = _monitoringTimings;
+            }
+        }
+    }
 
     public void StartSelected(IEnumerable<int> selectedItems)
     {
@@ -40,8 +75,6 @@ public class MainModel : INotifyPropertyChanged
             ServerMonitors[item].StopMonitoring();
         }
     }
-
-    public Timings MonitoringTimings { get; set; }
 
     public void AddMonitor(MonitoringPoint mp)
     {
@@ -62,6 +95,11 @@ public class MainModel : INotifyPropertyChanged
         ServerMonitors.RemoveAt(index);
     }
 
+    public void OnSettingsChanged(object? sender, PropertyChangedEventArgs args)
+    {
+        GetSettings();
+    }
+
     public void SaveList()
     {
         throw new NotImplementedException();
@@ -70,6 +108,12 @@ public class MainModel : INotifyPropertyChanged
     public void LoadList()
     {
         throw new NotImplementedException();
+    }
+    
+    private void GetSettings()
+    {
+        SmbPort = _settingsModel.SmbPort;
+        MonitoringTimings = _settingsModel.Timings;
     }
 
     private bool IsMonitorExists(MonitoringPoint mp)

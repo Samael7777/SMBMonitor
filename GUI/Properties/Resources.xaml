@@ -27,6 +27,8 @@
     <BitmapImage x:Key="Clear" UriSource="../Icons/icons8-broom-48.png"/>
     <BitmapImage x:Key="WiredLogo" UriSource="../Icons/icons8-wired-network-connection-50.png"/>
     <BitmapImage x:Key="Monitor" UriSource="../Icons/Main.ico"/>
+    <BitmapImage x:Key="SaveFile" UriSource="../Icons/icons8-save-48.png"/>
+
     <tb:TaskbarIcon x:Key="NotifyIcon" IconSource="../Icons/Main.ico"/>
 </ResourceDictionary>
 

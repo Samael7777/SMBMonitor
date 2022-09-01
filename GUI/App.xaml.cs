@@ -1,44 +1,42 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using Hardcodet.Wpf.TaskbarNotification;
-using SMBMonitor.Model;
-using SMBMonitor.View;
 using SMBMonitor.ViewModel;
 
-namespace SMBMonitor
+
+namespace SMBMonitor;
+
+/// <summary>
+/// Interaction logic for App.xaml
+/// </summary>
+public partial class App
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App
+    private readonly TaskbarIcon _taskbarIcon;
+
+    public App()
     {
-        private readonly TaskbarIcon _taskbarIcon;
-        public App()
-        {
-            InitializeComponent();
-            _taskbarIcon = (TaskbarIcon)Resources["NotifyIcon"];
-        }
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            _taskbarIcon.ToolTipText = "SMB Servers Monitor";
-            _taskbarIcon.Visibility = Visibility.Visible;
+        InitializeComponent();
+        _taskbarIcon = (TaskbarIcon)Resources["NotifyIcon"];
+        var contextMenu = (ContextMenu)Resources["TaskBarContextMenu"];
+        contextMenu.DataContext =new TaskBarContextMenuVM();
+        _taskbarIcon.ContextMenu = contextMenu;
+    }
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        _taskbarIcon.ToolTipText = "SMB Servers Monitor";
+        _taskbarIcon.Visibility = Visibility.Visible;
+        
+        WindowsContainer.MainWindow.Show();
 
-            var mainModel = new MainModel();
-            var mainWindow = new MainWindow();
-            var mainVM = new MainVM(mainModel, mainWindow);
-            
-            mainWindow.MonitorsList.SelectionChanged += mainVM.OnSelectionChanged;
-            
-            mainWindow.Show();
+        base.OnStartup(e);
+    }
 
-            base.OnStartup(e);
-        }
-
-        protected override void OnExit(ExitEventArgs e)
-        {
-            _taskbarIcon.Visibility = Visibility.Collapsed;
-            _taskbarIcon.Dispose();
-            
-            base.OnExit(e);
-        }
+    protected override void OnExit(ExitEventArgs e)
+    {
+        _taskbarIcon.Visibility = Visibility.Collapsed;
+        _taskbarIcon.Dispose();
+        
+        base.OnExit(e);
     }
 }
+

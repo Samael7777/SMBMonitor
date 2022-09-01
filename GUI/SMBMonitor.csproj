@@ -5,6 +5,8 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <StartupObject>SMBMonitor.App</StartupObject>
+    <ApplicationIcon>Icons\Main.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -44,6 +46,7 @@
     <None Remove="Icons\icons8-plus-50.png" />
     <None Remove="Icons\icons8-plus-math-50.png" />
     <None Remove="Icons\icons8-refresh-50.png" />
+    <None Remove="Icons\icons8-save-48.png" />
     <None Remove="Icons\icons8-select-all-50-2.png" />
     <None Remove="Icons\icons8-select-none-50.png" />
     <None Remove="Icons\icons8-settings-50.png" />
@@ -75,6 +78,9 @@
 
   <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.9" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -94,6 +100,7 @@
     <Resource Include="Icons\icons8-play-50.png" />
     <Resource Include="Icons\icons8-plus-math-50.png" />
     <Resource Include="Icons\icons8-refresh-50.png" />
+    <Resource Include="Icons\icons8-save-48.png" />
     <Resource Include="Icons\icons8-select-none-50.png" />
     <Resource Include="Icons\icons8-settings-50.png" />
     <Resource Include="Icons\icons8-shared-folder-50.png" />
@@ -124,10 +131,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Icons.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Model\" />
   </ItemGroup>
 
 </Project>

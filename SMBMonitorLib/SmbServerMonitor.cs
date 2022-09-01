@@ -135,11 +135,16 @@ public class SmbServerMonitor : IDisposable, IEquatable<SmbServerMonitor>
         void OnApConnected(IPAddress address)
         {
             Host = new Host(address, SmbPort);
+
+            _logger?.WriteFormattedLine($"Точка доступа подключена, IP {Host.IP}");
+            
             StartPortScanning();
         }
 
         void OnApDisconnected()
         {
+            _logger?.WriteFormattedLine("Точка доступа отключена.");
+
             Host = new Host();
             StopPortScanning();
             OnSMBUnavailable();
