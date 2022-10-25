@@ -5,6 +5,14 @@ VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMBMonitorLib", "SMBMonitorLib.csproj", "{8A6E640A-2E7D-4F87-80E2-472C99CDE9A7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Base", "..\Base\Base.csproj", "{F35D4EF4-6BCC-4FED-AD8E-DE48197D9723}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetworkUtils", "..\NetworkUtils\NetworkUtils.csproj", "{E9833D2C-BC9D-4A6F-9CA3-7FA474B8040F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmbAPI", "..\SmbAPI\SmbAPI.csproj", "{DCC5D1B7-A8B0-4426-984C-34953E144EE0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WifiAPI", "..\WifiAPI\WifiAPI.csproj", "{46D9256A-45FC-48E0-B5CD-37310EE2F6B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +23,22 @@ Global
 		{8A6E640A-2E7D-4F87-80E2-472C99CDE9A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A6E640A-2E7D-4F87-80E2-472C99CDE9A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A6E640A-2E7D-4F87-80E2-472C99CDE9A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F35D4EF4-6BCC-4FED-AD8E-DE48197D9723}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F35D4EF4-6BCC-4FED-AD8E-DE48197D9723}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F35D4EF4-6BCC-4FED-AD8E-DE48197D9723}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F35D4EF4-6BCC-4FED-AD8E-DE48197D9723}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9833D2C-BC9D-4A6F-9CA3-7FA474B8040F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9833D2C-BC9D-4A6F-9CA3-7FA474B8040F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9833D2C-BC9D-4A6F-9CA3-7FA474B8040F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9833D2C-BC9D-4A6F-9CA3-7FA474B8040F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCC5D1B7-A8B0-4426-984C-34953E144EE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCC5D1B7-A8B0-4426-984C-34953E144EE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCC5D1B7-A8B0-4426-984C-34953E144EE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCC5D1B7-A8B0-4426-984C-34953E144EE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46D9256A-45FC-48E0-B5CD-37310EE2F6B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46D9256A-45FC-48E0-B5CD-37310EE2F6B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46D9256A-45FC-48E0-B5CD-37310EE2F6B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46D9256A-45FC-48E0-B5CD-37310EE2F6B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
