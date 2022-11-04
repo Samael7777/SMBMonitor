@@ -9,22 +9,16 @@ namespace SmbMonitorLib;
 
 public class HostMonitoringService : ControlledService<HostMonitoringService>, IHostMonitoringService
 {
-    private static HostMonitoringService? instance;
-    private readonly ConcurrentDictionary<Host, HostMonitoringData> _hosts;
+    private readonly ConcurrentDictionary<Host, HostMonitoringData> _hosts = new();
     private Timer? _pollingTimer;
 
     private HostMonitoringService()
     {
-        _hosts = new ConcurrentDictionary<Host, HostMonitoringData>();
     }
 
-    public static HostMonitoringService Instance
+    public static void Initialize()
     {
-        get
-        {
-            instance ??= new HostMonitoringService();
-            return instance;
-        }
+        if (IsNotInitialized()) SetInstance(new HostMonitoringService());
     }
 
     public int PollingIntervalMs { get; set; } = 3000;

@@ -7,7 +7,6 @@ namespace SmbMonitorLib.Services.Internal;
 internal class WindowsSharesMonitoringService : ControlledService<WindowsSharesMonitoringService>,
     IWindowsSharesMonitoringService
 {
-    private static WindowsSharesMonitoringService? instance;
     private const string Query = @"select * from __InstanceOperationEvent within 1 where TargetInstance "
                                  + "isa 'Win32_LogicalDisk' and TargetInstance.DriveType = 4";
 
@@ -19,13 +18,9 @@ internal class WindowsSharesMonitoringService : ControlledService<WindowsSharesM
         _watcher.EventArrived += OnWMIEvent;
     }
 
-    public static WindowsSharesMonitoringService Instance
+    internal static void Initialize()
     {
-        get
-        {
-            instance ??= new WindowsSharesMonitoringService();
-            return instance;
-        }
+        if(IsNotInitialized()) SetInstance(new WindowsSharesMonitoringService());
     }
 
     public event Action? OnConnectedSharesListChanged;

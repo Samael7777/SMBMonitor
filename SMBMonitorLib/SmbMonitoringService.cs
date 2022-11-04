@@ -7,26 +7,37 @@ using SmbMonitorLib.Exceptions;
 using SmbMonitorLib.Services.Base;
 using SmbMonitorLib.Services.DTO;
 using SmbMonitorLib.Services.Interfaces;
-using SmbMonitorLib.Services.Internal;
 using Swordfish.NET.Collections;
 
 namespace SmbMonitorLib;
 
 public class SmbMonitoringService : ControlledService<SmbMonitoringService>
 {
-    private static SmbMonitoringService? instance;
     private readonly IHostMonitoringService _hostObserver;
     private readonly IWindowsSharesMonitoringService _sharesObserver;
+    private readonly ISmbManager _smbManager;
 
-    private SmbMonitoringService()
+    private SmbMonitoringService(
+            IHostMonitoringService hostObserver, 
+            IWindowsSharesMonitoringService sharesObserver,
+            ISmbManager smbManager)
     {
-        _hostObserver = HostMonitoringService.Instance;
-        _sharesObserver = WindowsSharesMonitoringService.Instance;
+        _hostObserver = hostObserver;
+        _sharesObserver = sharesObserver;
+        _smbManager = smbManager;
         SmbServers.CollectionChanged += OnSmbServersCollectionChanged;
+        
     }
 
-    public static SmbMonitoringService Instance => instance ??= new SmbMonitoringService();
-    
+    internal static void Initialize(
+            IHostMonitoringService hostObserver, 
+            IWindowsSharesMonitoringService sharesObserver,
+            ISmbManager smbManager)
+    {
+        if(IsNotInitialized()) 
+            SetInstance(new SmbMonitoringService(hostObserver, sharesObserver, smbManager));
+    }
+
     public ConcurrentObservableDictionary<Host, SmbMonitoringData> SmbServers { get; } = new();
     
     public void AddSmbServer(Host host, Credentials credentials)
@@ -112,7 +123,7 @@ public class SmbMonitoringService : ControlledService<SmbMonitoringService>
 
     private void OnConnectedSharesListChanged()
     {
-        var connectedServers = SmbManager.GetConnectedServers();
+        var connectedServers = _smbManager.GetConnectedServers();
         foreach (var server in connectedServers)
             if (!_hostObserver.Hosts.Contains(server))
                 _hostObserver.Hosts.Add(server);
@@ -150,7 +161,7 @@ public class SmbMonitoringService : ControlledService<SmbMonitoringService>
 
     private void AddConnectedServersToObserver()
     {
-        var servers = SmbManager.GetConnectedServers();
+        var servers = _smbManager.GetConnectedServers();
         foreach (var server in servers)
             if (!_hostObserver.Hosts.Contains(server))
                 _hostObserver.AddHost(server);
@@ -163,9 +174,9 @@ public class SmbMonitoringService : ControlledService<SmbMonitoringService>
         SetServerStatus(host, SmbStatus.Connecting);
 
         var credentials = SmbServers[host].Credentials;
-        var disconnectedShares = SmbManager.GetServerDisconnectedShares(host, credentials);
+        var disconnectedShares = _smbManager.GetServerDisconnectedShares(host, credentials);
         
-        SmbManager.ConnectSharesWithLettersReservation(disconnectedShares, credentials);
+        _smbManager.ConnectSharesWithLettersReservation(disconnectedShares, credentials);
 
         SetServerStatus(host, SmbStatus.Connected);
     }
@@ -181,22 +192,22 @@ public class SmbMonitoringService : ControlledService<SmbMonitoringService>
 
     private void DisconnectAllServerShares(Host host)
     {
-        SmbManager.DisconnectAllShares(host);
+        _smbManager.DisconnectAllShares(host);
         
-        LogWriteLine(!SmbManager.GetServerConnectedShares(host).Any()
+        LogWriteLine(!_smbManager.GetServerConnectedShares(host).Any()
             ? $"Все подключенные ресурсы SMB-сервера {host.IPAddress} отключены"
             : $"Имеются ошибки отключения ресурсов SMB-сервера {host.IPAddress}");
     }
 
     private void SetServerStatus(Host host, SmbStatus status)
     {
-        SmbServers[host].ConnectedShares = SmbManager.GetServerConnectedShares(host).Count();
+        SmbServers[host].ConnectedShares = _smbManager.GetServerConnectedShares(host).Count();
         SmbServers[host].Status = status;
     }
 
     private bool IsHostOrphaned(Host host)
     {
-        var connectedServers = SmbManager.GetConnectedServers();
+        var connectedServers = _smbManager.GetConnectedServers();
         return !SmbServers.ContainsKey(host) && !connectedServers.Contains(host);
     }
 }

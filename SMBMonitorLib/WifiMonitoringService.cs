@@ -16,7 +16,6 @@ namespace SmbMonitorLib;
 
 public class WifiMonitoringService : ControlledService<WifiMonitoringService>
 {
-    private static WifiMonitoringService? instance;
     private readonly WifiEventsNotificator _eventsNotificator = new();
     
     private WifiMonitoringService()
@@ -26,7 +25,10 @@ public class WifiMonitoringService : ControlledService<WifiMonitoringService>
         AccessPoints.CollectionChanged += AccessPointsCollectionChanged;
     }
 
-    public static WifiMonitoringService Instance => instance ??= new WifiMonitoringService();
+    internal static void Initialize()
+    {
+        if (IsNotInitialized()) SetInstance(new WifiMonitoringService());
+    }
     
     public ConcurrentObservableDictionary<WifiSSID, WifiMonitoringData> AccessPoints { get; } = new();
 

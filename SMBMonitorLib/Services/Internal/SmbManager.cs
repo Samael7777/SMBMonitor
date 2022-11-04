@@ -4,15 +4,24 @@ using NetworkUtils;
 using SmbAPI;
 using SmbAPI.Base;
 using SmbMonitorLib.Exceptions;
+using SmbMonitorLib.Services.Base;
 using SmbMonitorLib.Services.DTO;
+using SmbMonitorLib.Services.Interfaces;
 
 namespace SmbMonitorLib.Services.Internal;
 
-public static class SmbManager
+internal class SmbManager : BaseService<SmbManager>, ISmbManager
 {
-    public static ILogger? Logger { get; set; }
+    private SmbManager()
+    {
+    }
 
-    public static void ConnectSharesWithLettersReservation(IEnumerable<SmbResourceInfo> shares, Credentials credentials)
+    public static void Initialize()
+    {
+        if(IsNotInitialized()) SetInstance(new SmbManager());
+    }
+
+    public void ConnectSharesWithLettersReservation(IEnumerable<SmbResourceInfo> shares, Credentials credentials)
     {
         var requestList = new List<ShareConnectRequest>();
         foreach (var share in shares)
@@ -26,13 +35,13 @@ public static class SmbManager
         Parallel.ForEach(requestList, ConnectShare);
     }
 
-    public static void DisconnectAllShares(Host server)
+    public void DisconnectAllShares(Host server)
     {
         var shares = GetServerConnectedShares(server);
         Parallel.ForEach(shares, DisconnectShareAndFreeLetter);
     }
 
-    private static void ConnectShare(ShareConnectRequest shareConnectRequest)
+    private void ConnectShare(ShareConnectRequest shareConnectRequest)
     {
         var share = shareConnectRequest.Share.FullPathWithIP;
         var diskLetter = shareConnectRequest.DiskLetter;
@@ -56,7 +65,7 @@ public static class SmbManager
         LogWriteLine(message);
     }
 
-    public static void DisconnectShareAndFreeLetter(SmbResourceInfo share)
+    public void DisconnectShareAndFreeLetter(SmbResourceInfo share)
     {
         if (string.IsNullOrEmpty(share.LocalName)) return;
         var disk = share.LocalName;
@@ -86,7 +95,7 @@ public static class SmbManager
         LogWriteLine(message);
     }
 
-    public static IEnumerable<Host> GetConnectedServers()
+    public IEnumerable<Host> GetConnectedServers()
     {
         try
         {
@@ -101,7 +110,7 @@ public static class SmbManager
         }
     }
 
-    public static IEnumerable<SmbResourceInfo> GetServerConnectedShares(Host server)
+    public IEnumerable<SmbResourceInfo> GetServerConnectedShares(Host server)
     {
         try
         {
@@ -115,7 +124,7 @@ public static class SmbManager
         }
     }
 
-    public static IEnumerable<SmbResourceInfo> GetServerDisconnectedShares(Host server, Credentials credentials)
+    public IEnumerable<SmbResourceInfo> GetServerDisconnectedShares(Host server, Credentials credentials)
     {
         var availableShares = GetServerShares(server, credentials);
         var connectedShares = GetServerConnectedShares(server);
@@ -125,7 +134,7 @@ public static class SmbManager
         return disconnectedShares;
     }
 
-    public static IEnumerable<SmbResourceInfo> GetServerShares(Host server, Credentials credentials)
+    public IEnumerable<SmbResourceInfo> GetServerShares(Host server, Credentials credentials)
     {
         var serverPath = @$"\\{server.IPAddress}";
         var shares = new List<SmbResourceInfo>();
@@ -141,15 +150,9 @@ public static class SmbManager
         return shares;
     }
 
-    private static void CheckLetter(char letter)
+    private void CheckLetter(char letter)
     {
         if (char.ToLower(letter) is < 'a' or > 'z')
             throw new WrongLetterException();
-    }
-
-    private static void LogWriteLine(string message)
-    {
-        const string prefix = nameof(SmbManager);
-        Logger?.WriteFormattedLine($"{prefix} : {message}");
     }
 }
