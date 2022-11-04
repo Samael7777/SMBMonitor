@@ -1,4 +1,5 @@
 ﻿using Base;
+using SmbMonitorLib.Services.Interfaces;
 
 namespace SmbMonitorLib.Services.Base;
 

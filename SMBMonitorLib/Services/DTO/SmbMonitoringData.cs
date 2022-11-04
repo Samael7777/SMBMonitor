@@ -1,5 +1,5 @@
 ﻿using Base;
-using SMBMonitorLib.Services.Base;
+using SmbMonitorLib.Services.Base;
 
 namespace SmbMonitorLib.Services.DTO;
 
@@ -31,6 +31,4 @@ public class SmbMonitoringData : ModelItem
     }
 
     public int ConnectedShares { get; set; } = 0;
-
-
 }

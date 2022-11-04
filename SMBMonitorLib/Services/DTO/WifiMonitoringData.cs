@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Base;
+using SmbMonitorLib.Services.Base;
 
 namespace SmbMonitorLib.Services.DTO;
 

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Base;
+namespace SmbMonitorLib.Services.Base;
 
 public class ModelItem : INotifyPropertyChanged
 {

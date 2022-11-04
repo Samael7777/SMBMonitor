@@ -26,25 +26,8 @@ public class WifiMonitoringService : ControlledService<WifiMonitoringService>
         AccessPoints.CollectionChanged += AccessPointsCollectionChanged;
     }
 
-    public static WifiMonitoringService Instance
-    {
-        get
-        {
-            if (instance == null)
-                throw new InitializeException(nameof(Initialize));
-
-            return instance;
-        }
-    }
-
-    public static void Initialize()
-    {
-        if (instance != null) throw new AlreadyInitializedException();
-
-        instance = new WifiMonitoringService();
-    }
-
-
+    public static WifiMonitoringService Instance => instance ??= new WifiMonitoringService();
+    
     public ConcurrentObservableDictionary<WifiSSID, WifiMonitoringData> AccessPoints { get; } = new();
 
     public event Action<Host, Credentials>? OnAccessPointConnected;

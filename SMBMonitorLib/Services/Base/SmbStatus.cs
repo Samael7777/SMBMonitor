@@ -1,4 +1,4 @@
-﻿namespace SMBMonitorLib.Services.Base;
+﻿namespace SmbMonitorLib.Services.Base;
 
 public enum SmbStatus
 {

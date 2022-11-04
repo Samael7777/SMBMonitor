@@ -38,7 +38,7 @@ public readonly struct Host : IEquatable<Host>
     private static void CheckAddress(IPAddress address)
     {
         if (IsAddressIncorrect(address))
-            throw new ArgumentException("Address must be correct IPv4 individual address");
+            throw new ArgumentException("Address must be correct IPv4 host address");
     }
 
     private static bool IsAddressIncorrect(IPAddress address)

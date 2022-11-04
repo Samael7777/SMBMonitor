@@ -1,8 +1,8 @@
-﻿using SMBMonitorLib.Services.Base;
+﻿using SmbMonitorLib.Services.Base;
 
 namespace SmbMonitorLib.Services.DTO;
 
-internal record HostMonitoringInfo
+internal record HostMonitoringData
 {
     public LastScanStatus LastScanStatus { get; set; } = LastScanStatus.Unknown;
     public bool IsScanning { get; set; } = false;

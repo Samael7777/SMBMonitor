@@ -8,7 +8,6 @@ using SmbMonitorLib.Services.Base;
 using SmbMonitorLib.Services.DTO;
 using SmbMonitorLib.Services.Interfaces;
 using SmbMonitorLib.Services.Internal;
-using SMBMonitorLib.Services.Base;
 using Swordfish.NET.Collections;
 
 namespace SmbMonitorLib;
@@ -19,29 +18,14 @@ public class SmbMonitoringService : ControlledService<SmbMonitoringService>
     private readonly IHostMonitoringService _hostObserver;
     private readonly IWindowsSharesMonitoringService _sharesObserver;
 
-    private SmbMonitoringService(IHostMonitoringService hostObserver, IWindowsSharesMonitoringService sharesObserver)
+    private SmbMonitoringService()
     {
-        _hostObserver = hostObserver;
-        _sharesObserver = sharesObserver;
+        _hostObserver = HostMonitoringService.Instance;
+        _sharesObserver = WindowsSharesMonitoringService.Instance;
         SmbServers.CollectionChanged += OnSmbServersCollectionChanged;
     }
 
-    public static SmbMonitoringService Instance
-    {
-        get
-        {
-            if (instance == null)
-                throw new InitializeException(nameof(Initialize));
-
-            return instance;
-        }
-    }
-    
-    public static void Initialize(IHostMonitoringService _hostObserver, IWindowsSharesMonitoringService sharesObserver)
-    {
-        if (instance != null) throw new AlreadyInitializedException();
-        instance = new SmbMonitoringService(_hostObserver, sharesObserver);
-    }
+    public static SmbMonitoringService Instance => instance ??= new SmbMonitoringService();
     
     public ConcurrentObservableDictionary<Host, SmbMonitoringData> SmbServers { get; } = new();
     
@@ -62,16 +46,21 @@ public class SmbMonitoringService : ControlledService<SmbMonitoringService>
         LogWriteLine($"Добавлен хост {address}.");
     }
 
-    public void RemoveSmbServer(Host host, bool forceDisconnectShares = false)
+    public void RemoveSmbServer(Host host)
     {
         if (!SmbServers.ContainsKey(host)) throw new ItemNotExistsException();
 
-        if (forceDisconnectShares) DisconnectAllObservableServerShares(host);
         if (_hostObserver.Hosts.Contains(host)) _hostObserver.RemoveHost(host);
         
         SmbServers.Remove(host);
 
         LogWriteLine($"Удален хост {host.IPAddress}.");
+    }
+
+    public void RemoveSmbServerAndDisconnectShares(Host host)
+    {
+        DisconnectAllObservableServerShares(host);
+        RemoveSmbServer(host);
     }
 
     protected override void OnStart()
@@ -210,5 +199,4 @@ public class SmbMonitoringService : ControlledService<SmbMonitoringService>
         var connectedServers = SmbManager.GetConnectedServers();
         return !SmbServers.ContainsKey(host) && !connectedServers.Contains(host);
     }
-
 }

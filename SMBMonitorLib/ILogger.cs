@@ -1,4 +1,4 @@
-﻿namespace Base;
+﻿namespace SmbMonitorLib;
 
 public interface ILogger
 {

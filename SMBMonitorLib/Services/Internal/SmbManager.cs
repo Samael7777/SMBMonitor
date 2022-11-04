@@ -14,12 +14,12 @@ public static class SmbManager
 
     public static void ConnectSharesWithLettersReservation(IEnumerable<SmbResourceInfo> shares, Credentials credentials)
     {
-        var requestList = new List<RequestToConnectShare>();
+        var requestList = new List<ShareConnectRequest>();
         foreach (var share in shares)
         {
             var diskLetter = DiskLettersManager.GetNextFreeLetter();
             DiskLettersManager.AddLetterReservation(diskLetter);
-            var request = new RequestToConnectShare(share.RemoteName, diskLetter, credentials);
+            var request = new ShareConnectRequest(share.RemoteName, diskLetter, credentials);
             requestList.Add(request);
         }
 
@@ -32,15 +32,15 @@ public static class SmbManager
         Parallel.ForEach(shares, DisconnectShareAndFreeLetter);
     }
 
-    private static void ConnectShare(RequestToConnectShare request)
+    private static void ConnectShare(ShareConnectRequest shareConnectRequest)
     {
-        var share = request.share.FullPathWithIP;
-        var diskLetter = request.diskLetter;
+        var share = shareConnectRequest.Share.FullPathWithIP;
+        var diskLetter = shareConnectRequest.DiskLetter;
 
         var message = $"SMB-ресурс {share}";
         try
         {
-            SmbClient.ConnectNetworkDisk(share, diskLetter, request.Credentials);
+            SmbClient.ConnectNetworkDisk(share, diskLetter, shareConnectRequest.Credentials);
             message += $" подключен как диск {diskLetter}:";
         }
         catch (NoFreeLetterException)

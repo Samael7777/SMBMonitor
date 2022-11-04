@@ -4,18 +4,18 @@ using SmbMonitorLib.Exceptions;
 using SmbMonitorLib.Services.Base;
 using SmbMonitorLib.Services.DTO;
 using SmbMonitorLib.Services.Interfaces;
-using SMBMonitorLib.Services.Base;
 
-namespace SmbMonitorLib.Services.Internal;
+namespace SmbMonitorLib;
 
-internal class HostMonitoringService : ControlledService<HostMonitoringService>, IHostMonitoringService
+public class HostMonitoringService : ControlledService<HostMonitoringService>, IHostMonitoringService
 {
     private static HostMonitoringService? instance;
-    private readonly ConcurrentDictionary<Host, HostMonitoringInfo> _hosts = new();
+    private readonly ConcurrentDictionary<Host, HostMonitoringData> _hosts;
     private Timer? _pollingTimer;
 
     private HostMonitoringService()
     {
+        _hosts = new ConcurrentDictionary<Host, HostMonitoringData>();
     }
 
     public static HostMonitoringService Instance
@@ -26,7 +26,7 @@ internal class HostMonitoringService : ControlledService<HostMonitoringService>,
             return instance;
         }
     }
-    
+
     public int PollingIntervalMs { get; set; } = 3000;
 
     public int ScanTimeoutMs { get; set; } = 1000;
@@ -42,7 +42,7 @@ internal class HostMonitoringService : ControlledService<HostMonitoringService>,
     {
         if (_hosts.ContainsKey(host))
             throw new ItemExistsException();
-        if (!_hosts.TryAdd(host, new HostMonitoringInfo()))
+        if (!_hosts.TryAdd(host, new HostMonitoringData()))
             throw new StorageException();
 
         LogWriteLine($"Добавлен хост {host.IPAddress}.");
