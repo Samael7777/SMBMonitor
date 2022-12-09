@@ -1,130 +1,98 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using SmbMonitor.Models;
+using SmbMonitor.Services;
+using System.IO;
+using System.Reflection;
 using System.Windows;
-using System.Windows.Controls;
-using Hardcodet.Wpf.TaskbarNotification;
-using Microsoft.Toolkit.Uwp.Notifications;
-using SMBMonitor.View;
-using SMBMonitor.ViewModel;
+using System.Windows.Threading;
+using Wpf.Ui.Mvvm.Contracts;
+using Wpf.Ui.Mvvm.Services;
 
-
-namespace SMBMonitor;
-
-/// <summary>
-/// Interaction logic for App.xaml
-/// </summary>
-public partial class App
+namespace SmbMonitor
 {
-    private TaskbarIcon _taskbarIcon;
-    private MainWindow _mainWindow;
-
-    public App()
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
+    public partial class App
     {
-        InitializeComponent();
-        InitializeModels();
-        InitializeMainWindow();
-        InitializeCommands();
-        InitializeTaskbarIcon();
-    }
+        // The.NET Generic Host provides dependency injection, configuration, logging, and other services.
+        // https://docs.microsoft.com/dotnet/core/extensions/generic-host
+        // https://docs.microsoft.com/dotnet/core/extensions/dependency-injection
+        // https://docs.microsoft.com/dotnet/core/extensions/configuration
+        // https://docs.microsoft.com/dotnet/core/extensions/logging
+        private static readonly IHost _host = Host
+            .CreateDefaultBuilder()
+            .ConfigureAppConfiguration(c => { c.SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)); })
+            .ConfigureServices((context, services) =>
+            {
+                // App Host
+                services.AddHostedService<ApplicationHostService>();
 
-    public RelayCommand ShowMainWindow { get; private set; }
+                // Page resolver service
+                services.AddSingleton<IPageService, PageService>();
 
-    private static void InitializeModels()
-    {
-        ModelsContainer.Instance.BuildDependencies();
-    }
+                // Theme manipulation
+                services.AddSingleton<IThemeService, ThemeService>();
 
-    [MemberNotNull(nameof(_mainWindow))]
-    private void InitializeMainWindow()
-    {
-        _mainWindow = new MainWindow();
-    }
+                // TaskBar manipulation
+                services.AddSingleton<ITaskBarService, TaskBarService>();
 
-    [MemberNotNull(nameof(ShowMainWindow))]
-    private void InitializeCommands()
-    {
-        ShowMainWindow = new RelayCommand(_ => _mainWindow.Show());
-    }
+                // Service containing navigation, same as INavigationWindow... but without window
+                services.AddSingleton<INavigationService, NavigationService>();
 
+                // Main window with navigation
+                services.AddScoped<INavigationWindow, Views.Windows.MainWindow>();
+                services.AddScoped<ViewModels.MainWindowViewModel>();
 
-    [MemberNotNull(nameof(_taskbarIcon))]
-    private void InitializeTaskbarIcon()
-    {
-        _taskbarIcon = (TaskbarIcon)Resources["NotifyIcon"];
-        var contextMenu = (ContextMenu)Resources["TaskBarContextMenu"];
-        contextMenu.DataContext =new TaskBarContextMenuViewModel();
-        _taskbarIcon.ContextMenu = contextMenu;
-        _taskbarIcon.DoubleClickCommand = ShowMainWindow;
-    }
-    
-    protected override void OnStartup(StartupEventArgs e)
-    {
-        CreateTaskbarIcon();
-        LoadAppData();
+                // Views and ViewModels
+                services.AddScoped<Views.Pages.DashboardPage>();
+                services.AddScoped<ViewModels.DashboardViewModel>();
+                services.AddScoped<Views.Pages.DataPage>();
+                services.AddScoped<ViewModels.DataViewModel>();
+                services.AddScoped<Views.Pages.SettingsPage>();
+                services.AddScoped<ViewModels.SettingsViewModel>();
 
-        _mainWindow.Show();
+                // Configuration
+                services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));
+            }).Build();
 
-        base.OnStartup(e);
-    }
-    
-    protected override void OnExit(ExitEventArgs e)
-    {
-        SaveAppData();
-        DeleteTaskbarIcon();
-        
-        base.OnExit(e);
-    }
-
-    private void LoadAppData()
-    {
-        LoadMonitorsList();
-        LoadAppSettings();
-    }
-
-    private static void SaveAppData()
-    {
-        SaveMonitorsList();
-        SaveAppSettings();
-    }
-
-    private static void LoadMonitorsList()
-    {
-        ModelsContainer.Instance.MonitorsModel.LoadMonitorsFromFile();
-    }
-    
-    private static void SaveMonitorsList()
-    {
-        ModelsContainer.Instance.MonitorsModel.SaveMonitorsToFile();
-    }
-
-    private static void LoadAppSettings()
-    {
-        try
+        /// <summary>
+        /// Gets registered service.
+        /// </summary>
+        /// <typeparam name="T">Type of the service to get.</typeparam>
+        /// <returns>Instance of the service or <see langword="null"/>.</returns>
+        public static T? GetService<T>()
+            where T : class
         {
-            ModelsContainer.Instance.SettingsModel.LoadSettingsFromFile();
+            return _host.Services.GetService(typeof(T)) as T;
         }
-        catch
-        {
-            const string message = "Ошибка загрузки настроек. Применены настройки по умолчанию.";
-            new ToastContentBuilder()
-                .AddText(message)
-                .Show();
-        }
-    }
-    
-    private static void SaveAppSettings()
-    {
-        ModelsContainer.Instance.SettingsModel.SaveSettingsToFile();
-    }
-    private void CreateTaskbarIcon()
-    {
-        _taskbarIcon.ToolTipText = "SMB Servers Monitor";
-        _taskbarIcon.Visibility = Visibility.Visible;
-    }
 
-    private void DeleteTaskbarIcon()
-    {
-        _taskbarIcon.Visibility = Visibility.Collapsed;
-        _taskbarIcon.Dispose();
+        /// <summary>
+        /// Occurs when the application is loading.
+        /// </summary>
+        private async void OnStartup(object sender, StartupEventArgs e)
+        {
+            await _host.StartAsync();
+        }
+
+        /// <summary>
+        /// Occurs when the application is closing.
+        /// </summary>
+        private async void OnExit(object sender, ExitEventArgs e)
+        {
+            await _host.StopAsync();
+
+            _host.Dispose();
+        }
+
+        /// <summary>
+        /// Occurs when an exception is thrown by an application but not handled.
+        /// </summary>
+        private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            // For more info see https://docs.microsoft.com/en-us/dotnet/api/system.windows.application.dispatcherunhandledexception?view=windowsdesktop-6.0
+        }
     }
 }
-

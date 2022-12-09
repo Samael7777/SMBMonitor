@@ -7,16 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ConcurrentList" Version="1.4.0" />
-    <PackageReference Include="Swordfish.NET.CollectionsV3" Version="3.3.10" />
-    <PackageReference Include="System.Management" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Base\Base.csproj" />
-    <ProjectReference Include="..\NetworkUtils\NetworkUtils.csproj" />
-    <ProjectReference Include="..\SmbAPI\SmbAPI.csproj" />
-    <ProjectReference Include="..\WifiAPI\WifiAPI.csproj" />
+    <ProjectReference Include="..\NativeApi\NativeApi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="JsonConverters\" />
   </ItemGroup>
 
 </Project>

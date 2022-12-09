@@ -1,12 +1,15 @@
-﻿namespace SmbMonitorLib.Services.Base;
+﻿using SmbMonitorLib.Interfaces;
 
-public abstract class ControlledService<TService> : BaseService<TService>
-{ 
+namespace SmbMonitorLib.Services.Base;
+
+internal abstract class ControlledService<TService> : BaseService<TService>, IControlledService
+{
     public bool IsStarted { get; protected set; }
 
     public void Start()
     {
         if (IsStarted) return;
+
         IsStarted = true;
         LogWriteLine("Служба запущена.");
         OnStart();
@@ -15,11 +18,13 @@ public abstract class ControlledService<TService> : BaseService<TService>
     public void Stop()
     {
         if (!IsStarted) return;
+
         IsStarted = false;
         LogWriteLine("Служба остановлена.");
         OnStop();
     }
 
     protected abstract void OnStart();
+
     protected abstract void OnStop();
 }

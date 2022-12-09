@@ -3,10 +3,8 @@
 public class LetterManagerException : Exception
 {
     public LetterManagerException()
-    {
-    }
+    { }
 
     public LetterManagerException(string message) : base(message)
-    {
-    }
+    { }
 }
