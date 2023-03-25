@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMBMonitorLib", "SMBMonitorLib\SMBMonitorLib.csproj", "{4CBDD5C3-41AA-453D-AA7C-768E18AADC72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmbMonitor.Domain", "SmbMonitor.Domain\SmbMonitor.Domain.csproj", "{4CBDD5C3-41AA-453D-AA7C-768E18AADC72}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Forms", "Forms\Forms.csproj", "{B0AF0883-C388-406F-A6F3-11167EE2A8B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmbMonitor.Base", "SmbMonitor.Base\SmbMonitor.Base.csproj", "{CDEC9467-9872-42FE-8F8E-B91BE20F8234}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmbMonitor", "SmbMonitor\SmbMonitor.csproj", "{52FF3D0E-4F5B-486A-A33C-DDE0E2CB1C31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmbMonitor.NativeApi", "SmbMonitor.NativeApi\SmbMonitor.NativeApi.csproj", "{9862C9E2-FECB-4AFF-9015-043C68FD9FDC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMBMonitor.Domain.Tests", "SMBMonitor.Domain.Tests\SMBMonitor.Domain.Tests.csproj", "{83807F63-BC8E-44E5-A648-728F4F28E8FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmbMonitor.Forms", "SmbMonitor.Forms\SmbMonitor.Forms.csproj", "{669BFA82-A80C-430C-A9F4-314D5B1DA5EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +23,22 @@ Global
 		{4CBDD5C3-41AA-453D-AA7C-768E18AADC72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CBDD5C3-41AA-453D-AA7C-768E18AADC72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CBDD5C3-41AA-453D-AA7C-768E18AADC72}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B0AF0883-C388-406F-A6F3-11167EE2A8B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B0AF0883-C388-406F-A6F3-11167EE2A8B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B0AF0883-C388-406F-A6F3-11167EE2A8B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B0AF0883-C388-406F-A6F3-11167EE2A8B9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{52FF3D0E-4F5B-486A-A33C-DDE0E2CB1C31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{52FF3D0E-4F5B-486A-A33C-DDE0E2CB1C31}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{52FF3D0E-4F5B-486A-A33C-DDE0E2CB1C31}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{52FF3D0E-4F5B-486A-A33C-DDE0E2CB1C31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDEC9467-9872-42FE-8F8E-B91BE20F8234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDEC9467-9872-42FE-8F8E-B91BE20F8234}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDEC9467-9872-42FE-8F8E-B91BE20F8234}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDEC9467-9872-42FE-8F8E-B91BE20F8234}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9862C9E2-FECB-4AFF-9015-043C68FD9FDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9862C9E2-FECB-4AFF-9015-043C68FD9FDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9862C9E2-FECB-4AFF-9015-043C68FD9FDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9862C9E2-FECB-4AFF-9015-043C68FD9FDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83807F63-BC8E-44E5-A648-728F4F28E8FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83807F63-BC8E-44E5-A648-728F4F28E8FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83807F63-BC8E-44E5-A648-728F4F28E8FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83807F63-BC8E-44E5-A648-728F4F28E8FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{669BFA82-A80C-430C-A9F4-314D5B1DA5EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{669BFA82-A80C-430C-A9F4-314D5B1DA5EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{669BFA82-A80C-430C-A9F4-314D5B1DA5EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{669BFA82-A80C-430C-A9F4-314D5B1DA5EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

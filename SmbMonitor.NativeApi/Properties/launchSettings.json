@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "NativeApi": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
