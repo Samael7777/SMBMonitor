@@ -17,19 +17,19 @@ public class DiskLettersService : IDiskLettersService
 {
     private static readonly object _syncRoot = new();
     private readonly IMountedDiskLettersResolver _diskLettersResolver;
-    private readonly ConcurrentDictionary<char, UsageInfo> _letters;
+    private readonly ConcurrentDictionary<char, LetterUsageInfo> _letters;
     
     public DiskLettersService(IMountedDiskLettersResolver diskLettersResolver)
     {
-        _letters = new ConcurrentDictionary<char, UsageInfo>();
+        _letters = new ConcurrentDictionary<char, LetterUsageInfo>();
         _diskLettersResolver = diskLettersResolver;
 
         for (var letter = 'A'; letter <= 'Z'; letter++)
-            _letters.TryAdd(letter, new UsageInfo());
+            _letters.TryAdd(letter, new LetterUsageInfo());
     }
 
     // ReSharper disable once InconsistentlySynchronizedField
-    public IReadOnlyDictionary<char, UsageInfo> Letters
+    public IReadOnlyDictionary<char, LetterUsageInfo> Letters
     {
         get
         {

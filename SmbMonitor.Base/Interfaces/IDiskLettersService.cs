@@ -4,7 +4,7 @@ namespace SmbMonitor.Base.Interfaces;
 
 public interface IDiskLettersService
 {
-    IReadOnlyDictionary<char, UsageInfo> Letters { get; }
+    IReadOnlyDictionary<char, LetterUsageInfo> Letters { get; }
     void AddLetterReservation(char letter);
     void DeleteLetterReservation(char letter);
     char GetNextFreeLetterWithReservation();

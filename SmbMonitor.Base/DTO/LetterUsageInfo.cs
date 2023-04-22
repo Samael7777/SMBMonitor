@@ -1,6 +1,6 @@
 ﻿namespace SmbMonitor.Base.DTO;
 
-public class UsageInfo
+public class LetterUsageInfo
 {
     public bool IsReserved;
     public bool IsUsing;

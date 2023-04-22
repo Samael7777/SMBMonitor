@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmbMonitor.NativeApi", "Smb
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SMBMonitor.Domain.Tests", "SMBMonitor.Domain.Tests\SMBMonitor.Domain.Tests.csproj", "{83807F63-BC8E-44E5-A648-728F4F28E8FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmbMonitor.Forms", "SmbMonitor.Forms\SmbMonitor.Forms.csproj", "{669BFA82-A80C-430C-A9F4-314D5B1DA5EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmbMonitor.App", "SmbMonitor.App\SmbMonitor.App.csproj", "{B800901E-3189-49A2-840E-B1064101DADA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MahApps.Metro", "..\GitHub\MahApps.Metro\src\MahApps.Metro\MahApps.Metro.csproj", "{8403B150-DA67-45E8-B88D-6514D29A4B30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +37,14 @@ Global
 		{83807F63-BC8E-44E5-A648-728F4F28E8FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83807F63-BC8E-44E5-A648-728F4F28E8FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83807F63-BC8E-44E5-A648-728F4F28E8FC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{669BFA82-A80C-430C-A9F4-314D5B1DA5EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{669BFA82-A80C-430C-A9F4-314D5B1DA5EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{669BFA82-A80C-430C-A9F4-314D5B1DA5EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{669BFA82-A80C-430C-A9F4-314D5B1DA5EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B800901E-3189-49A2-840E-B1064101DADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B800901E-3189-49A2-840E-B1064101DADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B800901E-3189-49A2-840E-B1064101DADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B800901E-3189-49A2-840E-B1064101DADA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8403B150-DA67-45E8-B88D-6514D29A4B30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8403B150-DA67-45E8-B88D-6514D29A4B30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8403B150-DA67-45E8-B88D-6514D29A4B30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8403B150-DA67-45E8-B88D-6514D29A4B30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

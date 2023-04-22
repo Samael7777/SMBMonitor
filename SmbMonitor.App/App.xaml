@@ -1,0 +1,17 @@
+﻿<!-- ReSharper disable MarkupAttributeTypo -->
+<Application x:Class="SmbMonitor.App.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:fo="clr-namespace:SmbMonitor.App.Flyouts"
+             Startup ="OnStartup"
+             Exit="OnExit"
+    xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro">
+    <Application.Resources>
+        <ResourceDictionary>
+          <ResourceDictionary.MergedDictionaries>
+              <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+              <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
+          </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

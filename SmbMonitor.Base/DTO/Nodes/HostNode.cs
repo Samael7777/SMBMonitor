@@ -32,7 +32,6 @@ public class HostNode : BaseNotification
     {
         get => _status;
         set => SetField(ref _status, value);
-
     }
     public SmbStatus SmbStatus
     {
